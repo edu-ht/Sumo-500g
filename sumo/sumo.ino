@@ -6,7 +6,8 @@
 #define ESQ 1
 #define RAPIDO  255
 #define LENTO   128
-#define MINPROX 200 // valor minimo de proximidade para que algo seja detectado
+#define MINPROX 200  // valor minimo de proximidade para que algo seja detectado
+#define ESPERA  5000 // tempo de espera antes do comeco
 
 //------------------------------------------------------------------------------
 // Direcoes de movimento
@@ -95,6 +96,6 @@ void lerSensores () {
 }
 
 void loop () {
-  delay (5000);
-  motor (andaF, RAPIDO);
+  delay (ESPERA);
+  segue ();
 }
