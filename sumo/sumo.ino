@@ -4,10 +4,11 @@
 
 #define DIR 0
 #define ESQ 1
-#define RAPIDO  255
-#define LENTO   128
-#define MINPROX 200  // valor minimo de proximidade para que algo seja detectado
-#define ESPERA  5000 // tempo de espera antes do comeco
+#define RAPIDO   255
+#define LENTO    128
+#define MINPROX  200  // valor minimo pra que algo seja detectado
+#define MINLINHA 200  // valor minimo pra que linha seja detectada
+#define ESPERA   5000 // tempo de espera antes do comeco
 
 //------------------------------------------------------------------------------
 // Direcoes de movimento
@@ -97,5 +98,5 @@ void lerSensores () {
 
 void loop () {
   delay (ESPERA);
-  segue ();
+  segue (DIR, 1000);
 }
