@@ -18,24 +18,24 @@ void segue (int dir, int tempo) {
       case DIR:
         if (linhaDir > MINPROX && linhaEsq > MINPROX) {
           // frente
-          motor (andaF, RAPIDO);
+          motor (andaF, RAPIDO, RAPIDO);
         } else if (linhaEsq > MINPROX) {
           // esq
           dir = ESQ;
         } else {
           // dir
-          motor (andaD, LENTO);
+          motor (andaF, LENTO, RAPIDO);
         }
       case ESQ:
         if (linhaDir > MINPROX && linhaEsq > MINPROX) {
           // frente
-          motor (andaF, RAPIDO);
+          motor (andaF, RAPIDO, RAPIDO);
         } else if (linhaDir > MINPROX) {
           // dir
           dir = DIR;
         } else {
           // esq
-          motor (andaE, LENTO);
+          motor (andaF, RAPIDO, LENTO);
         }
     }
   }
@@ -47,7 +47,7 @@ void segue (int dir, int tempo) {
 //------------------------------------------------------------------------------
 void frente (int tempo) {
 
-  motor(andaF, RAPIDO);
+  motor(andaF, RAPIDO, RAPIDO);
 
   // delay por tempo delimitado
   for (int i = 0; i <= tempo; i++){

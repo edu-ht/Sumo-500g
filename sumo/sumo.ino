@@ -2,6 +2,8 @@
 // YAPIRA - SUMO 500g
 //------------------------------------------------------------------------------
 
+#include <IRremote.h> // Biblioteca do IR
+
 #define DIR 0
 #define ESQ 1
 #define RAPIDO   255
@@ -24,7 +26,8 @@
 //------------------------------------------------------------------------------
 // Pinos dos motores
 //------------------------------------------------------------------------------
-#define PWM       10  // valor 'analogico' da velocidade dos motores
+#define pwmEsq    9   // valor 'analogico' da velocidade dos motores
+#define pwmDir    3   // valor 'analogico' da velocidade dos motores
 #define motorDirF 12  // quando HIGH faz motor direito ir para frente
 #define motorDirT 9   // quando HIGH faz motor direito ir para tras
 #define motorEsqF 8
@@ -39,6 +42,13 @@
 #define pinoLinhaEsq  0
 
 //------------------------------------------------------------------------------
+// IR
+//------------------------------------------------------------------------------
+#define RECV_PIN 2
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+
+//------------------------------------------------------------------------------
 // Variaveis de estado
 //------------------------------------------------------------------------------
 int dirOponente;          // ultima direcao em que o oponente foi visto
@@ -49,17 +59,19 @@ int linhaDir, linhaEsq;   // valores dos sensores de linha
 void setup () {
 
   Serial.begin(9600);
+  irrecv.enableIRIn();         // Inicia o receiver do IR
   pinMode(motorDirF, OUTPUT);
   pinMode(motorDirT, OUTPUT);
   pinMode(motorEsqF, OUTPUT);
   pinMode(motorEsqT, OUTPUT);
-  analogWrite(PWM, 191);
+  analogWrite(pwmEsq, RAPIDO);
+  analogWrite(pwmDir, RAPIDO);
 }
 
 //------------------------------------------------------------------------------
 // Controla direcao dos motores e velocidade
 //------------------------------------------------------------------------------
-void motor (int mov, int vel) {
+void motor (int mov, int velEsq, int velDir) {
 
   uint8_t df,dt,ef,et; // valores dos pinos dos motores
 
@@ -83,7 +95,38 @@ void motor (int mov, int vel) {
   digitalWrite(motorDirT, dt);
   digitalWrite(motorEsqF, ef);
   digitalWrite(motorEsqT, et);
-  analogWrite(PWM, vel);
+  analogWrite(pwmEsq, velEsq);
+  analogWrite(pwmDir, velDir);
+}
+
+//------------------------------------------------------------------------------
+// Recebe informação sobre a estratégia a utilizar e da partida
+//------------------------------------------------------------------------------
+int IR_read () {
+
+   if (irrecv.decode(&results)) {
+      leitura = results.value, HEX;
+      Serial.println(leitura,HEX);
+      switch (leitura){
+         case 0xFF629D: Serial.println("UP");    cmd = 2;  break; //frente
+         case 0xFF02FD: Serial.println("OK");    cmd = 9;  break; //parar
+         case 0xFFA857: Serial.println("DOWN");  cmd = 6;  break; //ré
+         case 0xFF22DD: Serial.println("LEFT");  cmd = 8;  break; //girar esquerda
+         case 0xFFC23D: Serial.println("RIGHT"); cmd = 4;  break; //girar direita
+         case 0xFF6897: Serial.println("ONE");   cmd = 11; break;
+         case 0xFF9867: Serial.println("TWO");   cmd = 12; break;
+         case 0xFFB04F: Serial.println("THREE"); cmd = 13; break;
+         case 0xFF30CF: Serial.println("FOUR");  cmd = 14; break;
+         case 0xFF18E7: Serial.println("FIVE");  cmd = 15; break;
+         case 0xFF7A85: Serial.println("SIX");   cmd = 16; break;
+         case 0xFF10EF: Serial.println("SEVEN"); cmd = 17; break;
+         case 0xFF38C7: Serial.println("EIGHT"); cmd = 18; break;
+         case 0xFF5AA5: Serial.println("NINE");  cmd = 19; break;
+      }
+      delay(150);
+      irrecv.resume();  // Recebe próximo valor
+      delay(150);
+   }
 }
 
 //------------------------------------------------------------------------------
