@@ -58,7 +58,7 @@ void imprimir_sensores()
 }
 
 void loop() {
-  testar_sensores();
+  lerSensores();
   imprimir_sensores();
   delay(500);
 }
