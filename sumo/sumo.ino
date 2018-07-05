@@ -6,11 +6,14 @@
 
 #define DIR 0
 #define ESQ 1
-#define RAPIDO   255
+#define RAPIDO   192
 #define LENTO    128
 #define MINPROX  200  // valor minimo pra que algo seja detectado
-#define MINLINHA 200  // valor minimo pra que linha seja detectada
+#define MINLINHA 400  // valor minimo pra que linha seja detectada
 #define ESPERA   5000 // tempo de espera antes do comeco
+#define delayFreioLinha 400
+#define delayFreioGiro  300
+#define delayFrente     1000
 
 //------------------------------------------------------------------------------
 // Direcoes de movimento
@@ -26,20 +29,20 @@
 //------------------------------------------------------------------------------
 // Pinos dos motores
 //------------------------------------------------------------------------------
-#define pwmEsq    9   // valor 'analogico' da velocidade dos motores
-#define pwmDir    3   // valor 'analogico' da velocidade dos motores
-#define motorDirF 12  // quando HIGH faz motor direito ir para frente
-#define motorDirT 9   // quando HIGH faz motor direito ir para tras
-#define motorEsqF 8
-#define motorEsqT 7
+#define pwmEsq    3   // valor 'analogico' da velocidade dos motores
+#define pwmDir    12  // valor 'analogico' da velocidade dos motores
+#define motorDirF 7   // quando HIGH faz motor direito ir para frente
+#define motorDirT 8   // quando HIGH faz motor direito ir para tras
+#define motorEsqF 5
+#define motorEsqT 6
 
 //------------------------------------------------------------------------------
 // Pinos dos sensores
 //------------------------------------------------------------------------------
-#define pinoProxDir   3
-#define pinoProxEsq   0
-#define pinoLinhaDir  2
-#define pinoLinhaEsq  1
+#define pinoProxDir   A3
+#define pinoProxEsq   A0
+#define pinoLinhaDir  A2
+#define pinoLinhaEsq  A1
 
 //------------------------------------------------------------------------------
 // IR
@@ -51,7 +54,6 @@ decode_results results;
 //------------------------------------------------------------------------------
 // Variaveis de estado
 //------------------------------------------------------------------------------
-int dirOponente;          // ultima direcao em que o oponente foi visto
 int proxDir, proxEsq;     // valores dos sensores de proximidade
 int linhaDir, linhaEsq;   // valores dos sensores de linha
 
@@ -60,12 +62,12 @@ void setup () {
 
   Serial.begin(9600);
   irrecv.enableIRIn();         // Inicia o receiver do IR
-  pinMode(motorDirF, OUTPUT);
-  pinMode(motorDirT, OUTPUT);
-  pinMode(motorEsqF, OUTPUT);
-  pinMode(motorEsqT, OUTPUT);
-  analogWrite(pwmEsq, RAPIDO);
-  analogWrite(pwmDir, RAPIDO);
+  pinMode (motorDirF, OUTPUT);
+  pinMode (motorDirT, OUTPUT);
+  pinMode (motorEsqF, OUTPUT);
+  pinMode (motorEsqT, OUTPUT);
+  analogWrite (pwmEsq, RAPIDO);
+  analogWrite (pwmDir, RAPIDO);
 }
 
 //------------------------------------------------------------------------------
@@ -91,12 +93,12 @@ void motor (int mov, int velEsq, int velDir) {
     case freio: df = HIGH;  dt = HIGH;  ef = HIGH;  et = HIGH;
       break;
   }
-  digitalWrite(motorDirF, df);
-  digitalWrite(motorDirT, dt);
-  digitalWrite(motorEsqF, ef);
-  digitalWrite(motorEsqT, et);
-  analogWrite(pwmEsq, velEsq);
-  analogWrite(pwmDir, velDir);
+  digitalWrite (motorDirF, df);
+  digitalWrite (motorDirT, dt);
+  digitalWrite (motorEsqF, ef);
+  digitalWrite (motorEsqT, et);
+  analogWrite (pwmEsq, velEsq);
+  analogWrite (pwmDir, velDir);
 }
 
 //------------------------------------------------------------------------------
@@ -128,24 +130,32 @@ int IR_read () {
     irrecv.resume();  // Recebe próximo valor
     delay(150);
   }
+  return 0;
 }
 
 //------------------------------------------------------------------------------
 // Le valores de todos os sensores e guarda em variaveis globais
 //------------------------------------------------------------------------------
 void lerSensores () {
-  proxDir  = analogRead(pinoProxDir);
-  proxEsq  = analogRead(pinoProxEsq);
-  linhaDir = analogRead(pinoLinhaDir);
-  linhaEsq = analogRead(pinoLinhaEsq);
+  proxDir  = analogRead (pinoProxDir);
+  proxEsq  = analogRead (pinoProxEsq);
+  linhaDir = analogRead (pinoLinhaDir);
+  linhaEsq = analogRead (pinoLinhaEsq);
 }
 
 void loop () {
-  //delay (ESPERA);
-  int cmd = 0;
-  cmd = IR_read();
-  switch (cmd){
-    case  2: motor (andaF, LENTO, LENTO); break;
-    case 11: delay (ESPERA); segue (DIR, 1000); break;
+
+  switch (IR_read()) {
+
+    // movimentacao teste
+    case  2: motor (andaF, LENTO, LENTO);       break;
+    case  4: motor (andaD, LENTO, LENTO);       break;
+    case  8: motor (andaE, LENTO, LENTO);       break;
+    case  9: motor (andaF, 0, 0);               break;
+    case  6: motor (andaT, LENTO, LENTO);       break;
+
+    // estrategias
+    case 11: delay (ESPERA); segue (ESQ, delayFrente); break;
+    case 13: delay (ESPERA); segue (DIR, delayFrente); break;
   }
 }

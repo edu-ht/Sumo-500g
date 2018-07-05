@@ -48,7 +48,7 @@ void segue (int dir, int tempo) {
 //------------------------------------------------------------------------------
 void frente (int tempo) {
 
-  motor(andaF, RAPIDO, RAPIDO);
+  motor(andaF, 255, 255);
 
   // delay por tempo delimitado
   for (int i = 0; i <= tempo; i++){

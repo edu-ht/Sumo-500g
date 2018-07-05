@@ -4,13 +4,13 @@
 void linha (int dir) {
 
   // se nao detectou linha sai da funcao
-  if (linhaDir <= MINLINHA && linhaEsq <= MINLINHA) return;
+  if (linhaDir > MINLINHA && linhaEsq > MINLINHA) return;
 
-  motor (andaT, RAPIDO, RAPIDO);
-  delay (500);
+  motor (andaT, 255, 255);
+  delay (delayFreioLinha);
   switch (dir) {
     case DIR: motor (giraD, RAPIDO, RAPIDO);
     case ESQ: motor (giraE, RAPIDO, RAPIDO);
   }
-  delay (200);
+  delay (delayFreioGiro);
 }
