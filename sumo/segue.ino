@@ -9,7 +9,7 @@ void segue (int dir, int tempo) {
   while (true) {
 
     lerSensores();
-    // if (linhaDir > MINLINHA || linhaEsq > MINLINHA) linha();
+    linha(dir);
 
     // gira na ultima direcao vista do oponente
     // quando o encontra vai pra frente
@@ -38,6 +38,7 @@ void segue (int dir, int tempo) {
           motor (andaF, RAPIDO, LENTO);
         }
     }
+    delay (5);
   }
 
 }
