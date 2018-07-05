@@ -5,20 +5,20 @@
 //------------------------------------------------------------------------------
 // Pinos dos motores
 //------------------------------------------------------------------------------
-#define pwmEsq    9   // valor 'analogico' da velocidade dos motores
-#define pwmDir    3   // valor 'analogico' da velocidade dos motores
-#define motorDirF 12  // quando HIGH faz motor direito ir para frente
-#define motorDirT 9   // quando HIGH faz motor direito ir para tras
-#define motorEsqF 8
-#define motorEsqT 7
+#define pwmEsq    3   // valor 'analogico' da velocidade dos motores
+#define pwmDir    12  // valor 'analogico' da velocidade dos motores
+#define motorDirF 7   // quando HIGH faz motor direito ir para frente
+#define motorDirT 8   // quando HIGH faz motor direito ir para tras
+#define motorEsqF 5
+#define motorEsqT 6
 
 //------------------------------------------------------------------------------
 // Pinos dos sensores
 //------------------------------------------------------------------------------
-#define pinoProxDir   3
-#define pinoProxEsq   0
-#define pinoLinhaDir  2
-#define pinoLinhaEsq  1
+#define pinoProxDir   A3
+#define pinoProxEsq   A0
+#define pinoLinhaDir  A2
+#define pinoLinhaEsq  A1
 
 //------------------------------------------------------------------------------
 // Variaveis de estado
