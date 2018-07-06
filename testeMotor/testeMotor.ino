@@ -75,6 +75,6 @@ void loop () {
 
   motor (andaF, LENTO, RAPIDO);
   delay (500);
-  motor (andaF, RAPIDO, LENTO);
-  delay (500);
+  //motor (andaF, RAPIDO, LENTO);
+  //delay (500);
 }

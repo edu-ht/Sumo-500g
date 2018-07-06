@@ -16,6 +16,8 @@ void setup () {
 
   Serial.begin(9600);
   irrecv.enableIRIn();         // Inicia o receiver do IR
+  pinMode (2, INPUT);
+
 }
 
 //------------------------------------------------------------------------------
@@ -23,7 +25,7 @@ void setup () {
 //------------------------------------------------------------------------------
 int IR_read () {
 
-  int leitura;
+  int leitura=0;
   if (irrecv.decode(&results)) {
     leitura = results.value, HEX;
     Serial.println(leitura,HEX);
@@ -51,6 +53,8 @@ int IR_read () {
 }
 
 void loop () {
-
+  int teste = analogRead (2);
+  Serial.println(teste);
   IR_read();
+  delay(500);
 }

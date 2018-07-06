@@ -9,7 +9,7 @@ void segue (int dir, int tempo) {
   while (true) {
 
     lerSensores();
-    linha(dir);
+    //linha(dir);
 
     // gira na ultima direcao vista do oponente
     // quando o encontra vai pra frente
@@ -18,24 +18,30 @@ void segue (int dir, int tempo) {
       case DIR:
         if (linhaDir > MINPROX && linhaEsq > MINPROX) {
           // frente
-          motor (andaF, RAPIDO, RAPIDO);
+          Serial.println("Dir: FRENTE");
+          motor (andaF, 255, 255);
         } else if (linhaEsq > MINPROX) {
           // esq
+          Serial.println("Dir: ESQ");
           dir = ESQ;
         } else {
           // dir
-          motor (andaF, LENTO, RAPIDO);
+          Serial.println("Dir: DIR");
+          motor (andaF, curvaFora, curvaDentro);
         }
       case ESQ:
         if (linhaDir > MINPROX && linhaEsq > MINPROX) {
           // frente
-          motor (andaF, RAPIDO, RAPIDO);
+          Serial.println("Dir: FRENTE");
+          motor (andaF, 255, 255);
         } else if (linhaDir > MINPROX) {
           // dir
+          Serial.println("Dir: DIR");
           dir = DIR;
         } else {
           // esq
-          motor (andaF, RAPIDO, LENTO);
+          Serial.println("Dir: ESQ");
+          motor (andaF, curvaDentro, curvaFora);
         }
     }
     delay (5);

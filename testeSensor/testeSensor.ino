@@ -3,22 +3,12 @@
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-// Pinos dos motores
-//------------------------------------------------------------------------------
-#define pwmEsq    3   // valor 'analogico' da velocidade dos motores
-#define pwmDir    12  // valor 'analogico' da velocidade dos motores
-#define motorDirF 7   // quando HIGH faz motor direito ir para frente
-#define motorDirT 8   // quando HIGH faz motor direito ir para tras
-#define motorEsqF 5
-#define motorEsqT 6
-
-//------------------------------------------------------------------------------
 // Pinos dos sensores
 //------------------------------------------------------------------------------
-#define pinoProxDir   A3
-#define pinoProxEsq   A0
-#define pinoLinhaDir  A2
-#define pinoLinhaEsq  A1
+#define pinoProxDir   0
+#define pinoProxEsq   3
+#define pinoLinhaDir  1
+#define pinoLinhaEsq  2
 
 //------------------------------------------------------------------------------
 // Variaveis de estado
@@ -29,10 +19,6 @@ int linhaDir, linhaEsq;   // valores dos sensores de linha
 void setup () {
 
   Serial.begin(9600);
-  pinMode(motorDirF, OUTPUT);
-  pinMode(motorDirT, OUTPUT);
-  pinMode(motorEsqF, OUTPUT);
-  pinMode(motorEsqT, OUTPUT);
 }
 
 //------------------------------------------------------------------------------

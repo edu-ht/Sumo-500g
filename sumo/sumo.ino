@@ -6,13 +6,19 @@
 
 #define DIR 0
 #define ESQ 1
+
+//------------------------------------------------------------------------------
+// Configuracoes
+//------------------------------------------------------------------------------
+#define curvaFora   192
+#define curvaDentro 128
 #define RAPIDO   192
 #define LENTO    128
 #define MINPROX  200  // valor minimo pra que algo seja detectado
 #define MINLINHA 400  // valor minimo pra que linha seja detectada
 #define ESPERA   5000 // tempo de espera antes do comeco
-#define delayFreioLinha 400
-#define delayFreioGiro  300
+#define delayFreioLinha 300
+#define delayFreioGiro  200
 #define delayFrente     1000
 
 //------------------------------------------------------------------------------
@@ -39,10 +45,10 @@
 //------------------------------------------------------------------------------
 // Pinos dos sensores
 //------------------------------------------------------------------------------
-#define pinoProxDir   A3
-#define pinoProxEsq   A0
-#define pinoLinhaDir  A2
-#define pinoLinhaEsq  A1
+#define pinoProxDir   0
+#define pinoProxEsq   3
+#define pinoLinhaDir  2
+#define pinoLinhaEsq  1
 
 //------------------------------------------------------------------------------
 // IR
@@ -66,6 +72,7 @@ void setup () {
   pinMode (motorDirT, OUTPUT);
   pinMode (motorEsqF, OUTPUT);
   pinMode (motorEsqT, OUTPUT);
+  pinMode (2, INPUT);
   analogWrite (pwmEsq, RAPIDO);
   analogWrite (pwmDir, RAPIDO);
 }
@@ -157,5 +164,7 @@ void loop () {
     // estrategias
     case 11: delay (ESPERA); segue (ESQ, delayFrente); break;
     case 13: delay (ESPERA); segue (DIR, delayFrente); break;
+    case 14: delay (ESPERA); segue (ESQ, 0); break;
+    case 16: delay (ESPERA); segue (DIR, 0); break;
   }
 }
