@@ -75,21 +75,23 @@ void loop () {
 
   //motor (andaF, LENTO, RAPIDO);
   //delay (500);
-  //motor (andaF, RAPIDO, LENTO);
-  //delay (500);
+  motor (andaF, 128, 128);
+  delay (100);
 
-  digitalWrite (motorDirF, LOW);
-  digitalWrite (motorDirT, HIGH);
-  digitalWrite (motorEsqF, LOW);
-  digitalWrite (motorEsqT, HIGH);
-  //analogWrite (pwmEsq, 0);
-  analogWrite (pwmDir, 0);
+  //digitalWrite (motorDirF, LOW);
+  //digitalWrite (motorDirT, HIGH);
+  //digitalWrite (motorEsqF, LOW);
+  //digitalWrite (motorEsqT, HIGH);
+  ////analogWrite (pwmEsq, 0);
+  //analogWrite (pwmDir, 128);
+  //analogWrite (pwmEsq, 128);
+  delay (100);
 
-  for (int i = 0; i < 255; i++) {
-    analogWrite (pwmEsq, i);
-    //analogWrite (pwmDir, i);
-    delay (100);
-  }
+  //for (int i = 0; i < 255; i++) {
+  //  analogWrite (pwmEsq, i);
+  //  //analogWrite (pwmDir, i);
+  //  delay (100);
+  //}
 
   //Serial.println (pwmd);
   //Serial.println (pwme);

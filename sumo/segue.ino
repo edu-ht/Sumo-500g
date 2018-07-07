@@ -4,12 +4,7 @@
 //------------------------------------------------------------------------------
 void segue (int dir, int tempo) {
 
-  //frente(tempo);
-
-  //digitalWrite (motorDirF, HIGH);
-  //digitalWrite (motorDirT, LOW);
-  //digitalWrite (motorEsqF, HIGH);
-  //digitalWrite (motorEsqT, LOW);
+  frente(tempo);
 
   while (true) {
 
@@ -25,19 +20,19 @@ void segue (int dir, int tempo) {
           // frente
           Serial.println("Dir: FRENTE1");
           motor (andaF, 255, 255);
-          //analogWrite (pwmEsq, 128);
-          //analogWrite (pwmDir, 128);
           digitalWrite (13, HIGH);
         } else if (proxEsq > MINPROX) {
           // esq
           Serial.println("Dir: ESQ1");
           dir = ESQ;
+        } else if (proxDir > MINPROX) {
+          Serial.println("Dir: DIR1");
+          motor (giraE, LENTO, LENTO);
+          digitalWrite (13, LOW);
         } else {
           // dir
           Serial.println("Dir: DIR1");
-          motor (andaF, 191, 90);
-          //analogWrite (pwmEsq, 128);
-          //analogWrite (pwmDir, 0);
+          motor (andaF, curvaFora, curvaDentro-10);
           digitalWrite (13, LOW);
         } break;
       case ESQ:
@@ -45,19 +40,19 @@ void segue (int dir, int tempo) {
           // frente
           Serial.println("Dir: FRENTE2");
           motor (andaF, 255, 255);
-          //analogWrite (pwmEsq, 128);
-          //analogWrite (pwmDir, 128);
           digitalWrite (13, HIGH);
         } else if (proxDir > MINPROX) {
           // dir
           Serial.println("Dir: DIR2");
           dir = DIR;
+        } else if (proxEsq > MINPROX) {
+          Serial.println("Dir: DIR1");
+          motor (giraD, LENTO, LENTO);
+          digitalWrite (13, LOW);
         } else {
           // esq
           Serial.println("Dir: ESQ2");
-          motor (andaF, 90, 191);
-          //analogWrite (pwmEsq, 90);
-          //analogWrite (pwmDir, 191);
+          motor (andaF, curvaDentro, curvaFora);
           digitalWrite (13, LOW);
         } break;
     }
