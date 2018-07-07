@@ -10,16 +10,16 @@
 //------------------------------------------------------------------------------
 // Configuracoes
 //------------------------------------------------------------------------------
-#define curvaFora   192
-#define curvaDentro 128
+#define curvaFora   128
+#define curvaDentro 90
 #define RAPIDO   192
 #define LENTO    128
 #define MINPROX  200  // valor minimo pra que algo seja detectado
 #define MINLINHA 400  // valor minimo pra que linha seja detectada
-#define ESPERA   5000 // tempo de espera antes do comeco
+#define ESPERA   3350 // tempo de espera antes do comeco
 #define delayFreioLinha 300
 #define delayFreioGiro  200
-#define delayFrente     1000
+#define delayFrente     500
 
 //------------------------------------------------------------------------------
 // Direcoes de movimento
@@ -35,12 +35,12 @@
 //------------------------------------------------------------------------------
 // Pinos dos motores
 //------------------------------------------------------------------------------
-#define pwmEsq    3   // valor 'analogico' da velocidade dos motores
-#define pwmDir    12  // valor 'analogico' da velocidade dos motores
-#define motorDirF 7   // quando HIGH faz motor direito ir para frente
-#define motorDirT 8   // quando HIGH faz motor direito ir para tras
-#define motorEsqF 5
-#define motorEsqT 6
+#define pwmEsq    9   // valor 'analogico' da velocidade dos motores
+#define pwmDir    3   // valor 'analogico' da velocidade dos motores
+#define motorDirF 8   // quando HIGH faz motor direito ir para frente
+#define motorDirT 7   // quando HIGH faz motor direito ir para tras
+#define motorEsqF 6
+#define motorEsqT 5
 
 //------------------------------------------------------------------------------
 // Pinos dos sensores
@@ -63,16 +63,19 @@ decode_results results;
 int proxDir, proxEsq;     // valores dos sensores de proximidade
 int linhaDir, linhaEsq;   // valores dos sensores de linha
 
+const unsigned int NUM_MODOS = 3;
+__attribute__((section(".noinit"))) unsigned int modo; // guarda modo apos reset
+
 //------------------------------------------------------------------------------
 void setup () {
 
+  if (++modo > NUM_MODOS) modo = 0; // troca de modo ao inicializar
   Serial.begin(9600);
-  irrecv.enableIRIn();         // Inicia o receiver do IR
+  irrecv.enableIRIn();              // Inicia o receiver do IR
   pinMode (motorDirF, OUTPUT);
   pinMode (motorDirT, OUTPUT);
   pinMode (motorEsqF, OUTPUT);
   pinMode (motorEsqT, OUTPUT);
-  pinMode (2, INPUT);
   analogWrite (pwmEsq, RAPIDO);
   analogWrite (pwmDir, RAPIDO);
 }
@@ -152,19 +155,27 @@ void lerSensores () {
 
 void loop () {
 
-  switch (IR_read()) {
+  switch (modo) {
 
-    // movimentacao teste
-    case  2: motor (andaF, LENTO, LENTO);       break;
-    case  4: motor (andaD, LENTO, LENTO);       break;
-    case  8: motor (andaE, LENTO, LENTO);       break;
-    case  9: motor (andaF, 0, 0);               break;
-    case  6: motor (andaT, LENTO, LENTO);       break;
-
-    // estrategias
-    case 11: delay (ESPERA); segue (ESQ, delayFrente); break;
-    case 13: delay (ESPERA); segue (DIR, delayFrente); break;
-    case 14: delay (ESPERA); segue (ESQ, 0); break;
-    case 16: delay (ESPERA); segue (DIR, 0); break;
+    case 0: digitalWrite (13, HIGH); delay(500); break;
+    case 1: digitalWrite (13, LOW); delay (ESPERA); segue (ESQ, delayFrente); break;
+    case 2: digitalWrite (13, HIGH); delay (500); digitalWrite (13, LOW); delay (500); break;
+    case 3: digitalWrite (13, LOW); delay (ESPERA); segue (DIR, delayFrente); break;
   }
+
+//  switch (IR_read()) {
+//
+//    // movimentacao teste
+//    case  2: motor (andaF, LENTO, LENTO);       break;
+//    case  4: motor (andaD, LENTO, LENTO);       break;
+//    case  8: motor (andaE, LENTO, LENTO);       break;
+//    case  9: motor (andaF, 0, 0);               break;
+//    case  6: motor (andaT, LENTO, LENTO);       break;
+//
+//    // estrategias
+//    case 11: delay (ESPERA); segue (ESQ, delayFrente); break;
+//    case 13: delay (ESPERA); segue (DIR, delayFrente); break;
+//    case 14: delay (ESPERA); segue (ESQ, 0); break;
+//    case 16: delay (ESPERA); segue (DIR, 0); break;
+//  }
 }

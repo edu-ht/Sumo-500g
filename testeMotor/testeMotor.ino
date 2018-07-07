@@ -21,8 +21,8 @@
 //------------------------------------------------------------------------------
 // Pinos dos motores
 //------------------------------------------------------------------------------
-#define pwmEsq    3   // valor 'analogico' da velocidade dos motores
-#define pwmDir    12  // valor 'analogico' da velocidade dos motores
+#define pwmEsq    9   // valor 'analogico' da velocidade dos motores
+#define pwmDir    3  // valor 'analogico' da velocidade dos motores
 #define motorDirF 7   // quando HIGH faz motor direito ir para frente
 #define motorDirT 8   // quando HIGH faz motor direito ir para tras
 #define motorEsqF 5
@@ -73,8 +73,25 @@ void motor (int mov, int velEsq, int velDir) {
 
 void loop () {
 
-  motor (andaF, LENTO, RAPIDO);
-  delay (500);
+  //motor (andaF, LENTO, RAPIDO);
+  //delay (500);
   //motor (andaF, RAPIDO, LENTO);
   //delay (500);
+
+  digitalWrite (motorDirF, LOW);
+  digitalWrite (motorDirT, HIGH);
+  digitalWrite (motorEsqF, LOW);
+  digitalWrite (motorEsqT, HIGH);
+  //analogWrite (pwmEsq, 0);
+  analogWrite (pwmDir, 0);
+
+  for (int i = 0; i < 255; i++) {
+    analogWrite (pwmEsq, i);
+    //analogWrite (pwmDir, i);
+    delay (100);
+  }
+
+  //Serial.println (pwmd);
+  //Serial.println (pwme);
+
 }

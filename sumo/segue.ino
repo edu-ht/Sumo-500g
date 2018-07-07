@@ -4,7 +4,12 @@
 //------------------------------------------------------------------------------
 void segue (int dir, int tempo) {
 
-  frente(tempo);
+  //frente(tempo);
+
+  //digitalWrite (motorDirF, HIGH);
+  //digitalWrite (motorDirT, LOW);
+  //digitalWrite (motorEsqF, HIGH);
+  //digitalWrite (motorEsqT, LOW);
 
   while (true) {
 
@@ -16,37 +21,62 @@ void segue (int dir, int tempo) {
     // quando o detecta no sensor do lado oposto muda de direcao
     switch (dir) {
       case DIR:
-        if (linhaDir > MINPROX && linhaEsq > MINPROX) {
+        if (proxDir > MINPROX && proxEsq > MINPROX) {
           // frente
-          Serial.println("Dir: FRENTE");
+          Serial.println("Dir: FRENTE1");
           motor (andaF, 255, 255);
-        } else if (linhaEsq > MINPROX) {
+          //analogWrite (pwmEsq, 128);
+          //analogWrite (pwmDir, 128);
+          digitalWrite (13, HIGH);
+        } else if (proxEsq > MINPROX) {
           // esq
-          Serial.println("Dir: ESQ");
+          Serial.println("Dir: ESQ1");
           dir = ESQ;
         } else {
           // dir
-          Serial.println("Dir: DIR");
-          motor (andaF, curvaFora, curvaDentro);
-        }
+          Serial.println("Dir: DIR1");
+          motor (andaF, 191, 90);
+          //analogWrite (pwmEsq, 128);
+          //analogWrite (pwmDir, 0);
+          digitalWrite (13, LOW);
+        } break;
       case ESQ:
-        if (linhaDir > MINPROX && linhaEsq > MINPROX) {
+        if (proxDir > MINPROX && proxEsq > MINPROX) {
           // frente
-          Serial.println("Dir: FRENTE");
+          Serial.println("Dir: FRENTE2");
           motor (andaF, 255, 255);
-        } else if (linhaDir > MINPROX) {
+          //analogWrite (pwmEsq, 128);
+          //analogWrite (pwmDir, 128);
+          digitalWrite (13, HIGH);
+        } else if (proxDir > MINPROX) {
           // dir
-          Serial.println("Dir: DIR");
+          Serial.println("Dir: DIR2");
           dir = DIR;
         } else {
           // esq
-          Serial.println("Dir: ESQ");
-          motor (andaF, curvaDentro, curvaFora);
-        }
+          Serial.println("Dir: ESQ2");
+          motor (andaF, 90, 191);
+          //analogWrite (pwmEsq, 90);
+          //analogWrite (pwmDir, 191);
+          digitalWrite (13, LOW);
+        } break;
     }
-    delay (5);
+    //imprimir_sensores();
+    delay (10);
   }
 
+}
+
+//------------------------------------------------------------------------------
+// Avancar para frente por um periodo de tempo
+//------------------------------------------------------------------------------
+void imprimir_sensores()
+{
+  Serial.print("proxDir: ");  Serial.println(proxDir);
+  Serial.print("proxEsq: ");  Serial.println(proxEsq);
+  Serial.print("linhaDir: "); Serial.println(linhaDir);
+  Serial.print("linhaEsq: "); Serial.println(linhaEsq);
+  Serial.println("--------------------------------------------------------------------");
 }
 
 //------------------------------------------------------------------------------
@@ -55,6 +85,7 @@ void segue (int dir, int tempo) {
 void frente (int tempo) {
 
   motor(andaF, 255, 255);
+  //Serial.println("Frente");
 
   // delay por tempo delimitado
   for (int i = 0; i <= tempo; i++){
